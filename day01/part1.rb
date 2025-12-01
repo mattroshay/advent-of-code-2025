@@ -3,19 +3,26 @@
 # need to store the input which is an html file with thousands of single line instrucitons
 #
 
-myInput = []
+
 myInput = File.readlines("day01/input.txt")
-# myInput.chop!
-startingPosition = 50
-currentPosition = startingPosition
+myInput.map! { |input| input.chomp }
+
+dialRange = (0..99).to_a
+currentPosition = 50
 zeroCount = 0
 
-myInput.each do |input|
-  puts input[1..-1]
+myInput.each_with_index do |input|
+  magnitude = input[1..-1].to_i
   if input.chr == "L"
-    currentPosition -= input[1..-1].to_i
+    currentPosition -= magnitude
   else
-    currentPosition += input[1..-1].to_i
+    currentPosition += magnitude
   end
-  puts currentPosition
+  # puts currentPosition
+  dialRange.cycle.take(magnitude).each do |value|
+    zeroCount += 1 if currentPosition[value] == 0
+  end
+
 end
+
+puts zeroCount
