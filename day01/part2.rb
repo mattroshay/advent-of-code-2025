@@ -10,14 +10,15 @@ DIAL_SIZE = 100
 
 my_input.each do |input|
   magnitude = input.delete('LR').to_i
-  x = (magnitude / DIAL_SIZE).to_i
-  zero_count += x
+  full_turns, remainder = magnitude.divmod(DIAL_SIZE)
+  zero_count += full_turns
   if input.chr == "L"
-    current_position = (current_position - magnitude) % DIAL_SIZE
+    zero_count += 1 if current_position != 0 && remainder >= current_position
+    current_position = (current_position - remainder) % DIAL_SIZE
   else
-    current_position = (current_position + magnitude) % DIAL_SIZE
+    zero_count += 1 if current_position != 0 && remainder >= (DIAL_SIZE - current_position)
+    current_position = (current_position + remainder) % DIAL_SIZE
   end
-  zero_count += 1 if current_position == 0
 end
 
 print "Part 2: "
