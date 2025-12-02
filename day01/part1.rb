@@ -7,22 +7,25 @@
 myInput = File.readlines("day01/input.txt")
 myInput.map! { |input| input.chomp }
 
-dialRange = (0..99).to_a
-currentPosition = 50
 zeroCount = 0
+currentPosition = 50
+DIAL_SIZE = 100
 
-myInput.each_with_index do |input|
-  magnitude = input[1..-1].to_i
+# alternative from gpt:
+# direction = input[0]
+# magnitude = input[1..].to_i
+
+myInput.each do |input|
+  magnitude = input.delete('LR').to_i
   if input.chr == "L"
-    currentPosition -= magnitude
+    currentPosition = (currentPosition - magnitude) % DIAL_SIZE
   else
-    currentPosition += magnitude
+    currentPosition = (currentPosition + magnitude) % DIAL_SIZE
   end
-  # puts currentPosition
-  dialRange.cycle.take(magnitude).each do |value|
-    zeroCount += 1 if currentPosition[value] == 0
-  end
-
+  zeroCount += 1 if currentPosition == 0
 end
 
+print "Part 1: "
 puts zeroCount
+
+
